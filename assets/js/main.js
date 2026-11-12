@@ -88,12 +88,12 @@ if ('IntersectionObserver' in window) {
   items.forEach((el) => { el.classList.add('reveal'); io.observe(el); });
 }
 
-// Background music: 50% volume, tries to autoplay, else starts on the first click, tap or key press
+// Background music: 40% volume, tries to autoplay, else starts on the first click, tap or key press
 // (browsers block sound before any interaction). The mute choice is remembered.
 const bgm = document.getElementById('bgm');
 const musicBtn = document.querySelector('.music-btn');
 if (bgm && musicBtn) {
-  bgm.volume = 0.5;
+  bgm.volume = 0.4;
   let muted = false;
   try { muted = localStorage.getItem('bgm-muted') === '1'; } catch (e) {}
   const setUi = (playing) => {

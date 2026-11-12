@@ -287,3 +287,8 @@ a { color: inherit; }
 .footer-inner { gap: 16px; flex-wrap: wrap; align-items: center; }
 .credit { font-size: 12px; opacity: 0.85; }
 .credit a { text-decoration: underline; color: #BDB4A7; }
+.play-me { position: absolute; bottom: calc(100% + 10px); right: 0; white-space: nowrap; background: var(--accent); color: var(--white); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 10px; pointer-events: none; animation: nudge 1.6s ease-in-out infinite; }
+.play-me::after { content: ""; position: absolute; top: 100%; right: 16px; border: 6px solid transparent; border-top-color: var(--accent); }
+.music-btn.playing .play-me { display: none; }
+@keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { .play-me { animation: none; } }
