@@ -87,3 +87,40 @@ if ('IntersectionObserver' in window) {
   }, { threshold: 0.12 });
   items.forEach((el) => { el.classList.add('reveal'); io.observe(el); });
 }
+
+// Background music: 50% volume, starts on the visitor's first click, tap or key press
+// (browsers block sound before any interaction). The mute choice is remembered.
+const bgm = document.getElementById('bgm');
+const musicBtn = document.querySelector('.music-btn');
+if (bgm && musicBtn) {
+  bgm.volume = 0.5;
+  let muted = false;
+  try { muted = localStorage.getItem('bgm-muted') === '1'; } catch (e) {}
+  const setUi = (playing) => {
+    musicBtn.classList.toggle('playing', playing);
+    musicBtn.setAttribute('aria-pressed', String(playing));
+    musicBtn.setAttribute('aria-label', playing ? 'Mute background music' : 'Play background music');
+  };
+  const play = () => bgm.play().then(() => setUi(true)).catch(() => setUi(false));
+  const startOnce = (e) => {
+    if (e.target.closest && e.target.closest('.music-btn')) return;
+    removeStart();
+    if (!muted && bgm.paused) play();
+  };
+  const removeStart = () => ['pointerup', 'keydown', 'touchend', 'click'].forEach((t) => window.removeEventListener(t, startOnce, true));
+  ['pointerup', 'keydown', 'touchend', 'click'].forEach((t) => window.addEventListener(t, startOnce, true));
+  musicBtn.addEventListener('click', () => {
+    removeStart();
+    if (bgm.paused) {
+      muted = false;
+      try { localStorage.setItem('bgm-muted', '0'); } catch (e) {}
+      play();
+    } else {
+      bgm.pause();
+      muted = true;
+      try { localStorage.setItem('bgm-muted', '1'); } catch (e) {}
+      setUi(false);
+    }
+  });
+  setUi(false);
+}
