@@ -88,7 +88,7 @@ if ('IntersectionObserver' in window) {
   items.forEach((el) => { el.classList.add('reveal'); io.observe(el); });
 }
 
-// Background music: 50% volume, starts on the visitor's first click, tap or key press
+// Background music: 50% volume, tries to autoplay, else starts on the first click, tap or key press
 // (browsers block sound before any interaction). The mute choice is remembered.
 const bgm = document.getElementById('bgm');
 const musicBtn = document.querySelector('.music-btn');
@@ -123,4 +123,12 @@ if (bgm && musicBtn) {
     }
   });
   setUi(false);
+
+  // Try to start right away when the page opens. Browsers that allow autoplay
+  // (for example Chrome for returning visitors, or when the site is allowed sound)
+  // play immediately; the rest fall back to the first click, tap or key press above.
+  if (!muted) {
+    bgm.preload = 'auto';
+    bgm.play().then(() => { setUi(true); removeStart(); }).catch(() => {});
+  }
 }
